@@ -57,9 +57,3 @@ def add_page_to_index(index,url,content):
         add_to_index(index,keyword,url)
 
 
-
-################################################################################################################################
-
-index, graph = crawl_web('https://theboffinn.wordpress.com',2);
-ranks = compute_ranks(graph)
-print ordered_search(index, ranks, 'something')
