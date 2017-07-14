@@ -18,12 +18,6 @@ def get_next_target(page):
     url = page[start_quote + 1:end_quote]
     return url, end_quote
 
-# p is union of p and q
-def union(p,q):
-    for e in q:
-        if e not in p:
-            p.append(e)
-
 # Returns all links in the web page
 def get_all_links(page):
     links = []
@@ -35,9 +29,18 @@ def get_all_links(page):
         else:
             break
     return links
+    
+# p is union of p and q
+def union(p,q):
+    for e in q:
+        if e not in p:
+            p.append(e)
+            
+            
+            
+            
 
 # The main function that crawls the web pages starting with the seed fucntion
-# Currently, if. started on the web, it will keep crawling becuase of the endless chain of links
 # It also constructs a dictionary with url as the key and the links in the page as the values
 
 def crawl_web(seed, max_depth):
@@ -64,12 +67,13 @@ def crawl_web(seed, max_depth):
     return index, graph
 
 
-# Function that add word to the index
+# Adds word to the index
+#Appends to the list of urls for the keyword if keyword is present
+# If keyword is not found, adds new entry for the keyword to the dictionary
 def add_to_index(index,keyword,url):
-    if keyword in index:
+    if keyword in index:                     
         index[keyword].append(url)
     else:
-        # not found, add new keyword to index
         index[keyword] = [url]
 
 # Help function that search the index for the keyword
@@ -79,29 +83,18 @@ def lookup(index,keyword):
     else:
         return None
 
-# Function that splits page into words and adds them to index
+# Takes the page details as input and updates the index
 def add_page_to_index(index,url,content):
     words = content.split()
     for keyword in words:
         add_to_index(index,keyword,url)
 
-# Function for recording cliks on a particular link
-def record_user_click(index,keyword,url):
-    urls = lookup(index, keyword)
-    if urls:
-        for entry in urls:
-            if entry[0] == url:
-                entry[1] += 1
-
-#
-# Functions required for ranking
-#
 
 # Function that computes page ranks
 #
 # Formula to count rank:
 #
-# rank(page, 0) = 1/npages
+# rank(page, 0) = 1/npages 
 # rank(page, t) = (1-d)/npages
 #                 + sum (d * rank(p, t - 1) / number of outlinks from p)
 #                 over all pages p that link to this page
@@ -119,7 +112,7 @@ def compute_ranks(graph):
         newranks = {}
         for page in graph:
             newrank = (1 - d) / npages
-            #Loop throught all pages
+            #Loop through all pages
             for node in graph:
                 #check if node links to page
                 if page in graph[node]:
@@ -129,8 +122,8 @@ def compute_ranks(graph):
         ranks = newranks
     return ranks
 
-# Function that returns the one URL most likely to be the best site for that
-# keyword. If the keyword does not appear in the index return None
+# Returns the one URL most likely to be the best site for that
+# keyword. Returns None if the keyword does not appear in the index,
 def best_search(index, ranks, keyword):
     return_url = '';
     if keyword not in index:
@@ -150,7 +143,10 @@ def ordered_search(index, ranks, keyword):
     pages = lookup(index, keyword)
     return quick_sort(pages, ranks)
 
-# Help function that uses quick sort algorithm to order array
+
+# Sorts the pages according to their ranks before displaying results
+# Quick sort is currently the fastest known sorting alogrithm
+
 def quick_sort(pages, ranks):
     if not pages or len(pages) <= 1:
         return pages
@@ -166,9 +162,11 @@ def quick_sort(pages, ranks):
     return quick_sort(better, ranks) + [pages[0]] + quick_sort(worse, ranks)
 
 
+
+
+
+################################################################################################################################
+
 index, graph = crawl_web('https://theboffinn.wordpress.com',2);
-
-
 ranks = compute_ranks(graph)
-
 print ordered_search(index, ranks, 'something')
