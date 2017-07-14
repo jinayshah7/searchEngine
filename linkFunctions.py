@@ -2,30 +2,42 @@
 
 # Returns a string with the content of the web page
 def get_page(url):
-	try:
-		import urllib
-		return urllib.urlopen(url).read()
-	except:
-		return ""
+    try:
+        import urllib
+        return urllib.urlopen(url).read()
+    except:
+        return ""
+
+
+
+
 
 # Extracts the url and returns it along with the index position of the end quote of url
 def get_next_target(page):
-	start_link = page.find('<a href=')
-	if start_link == -1:
-		return None, 0
-	start_quote = page.find('"', start_link)
-	end_quote = page.find('"', start_quote + 1)
-	url = page[start_quote + 1:end_quote]
-	return url, end_quote
+    start_link = page.find('<a href=')
+    if start_link == -1:
+        return None, 0
+    start_quote = page.find('"', start_link)
+    end_quote = page.find('"', start_quote + 1)
+    url = page[start_quote + 1:end_quote]
+    return url, end_quote
+
 
 # Returns all links in the web page
 def get_all_links(page):
-	links = []
-	while True:
-		url,endpos = get_next_target(page)
-		if url:
-			links.append(url)
-			page = page[endpos:]
-		else:
-			break
-	return links
+    links = []
+    while True:
+        url, endpos = get_next_target(page)
+        if url:
+            page = page[endpos:]
+            if "www" in url:
+                links.append(url)
+        else:
+            break
+    return links
+
+
+#som = get_all_links(get_page("http://www.bvmengineering.ac.in"))
+
+#for i in som:
+ #   print i

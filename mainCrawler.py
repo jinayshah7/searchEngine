@@ -58,8 +58,8 @@ def add_page_to_index(index,url,content):
 
 
 
-################################################################################################################################
+#index, graph = crawl_web("http://www.reddit.com",1)
 
-index, graph = crawl_web('https://theboffinn.wordpress.com',2);
-ranks = compute_ranks(graph)
-print ordered_search(index, ranks, 'something')
+
+#for i in graph:
+ #   print i

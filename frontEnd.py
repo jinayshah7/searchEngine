@@ -6,8 +6,10 @@ from utilityFunctions import *
 from rankingFunctions import *
 
 
-searchKeyword  = input("Enter the keyword to be searched: ")
+searchKeyword  = raw_input("Enter the keyword to be searched: ")
 
-index, graph = crawl_web('https://theboffinn.wordpress.com',2);
+index, graph = crawl_web('http://www.bvmengineering.ac.in',1);
+print graph
 ranks = compute_ranks(graph)
-print ordered_search(index, ranks, 'abc')
+
+print ordered_search(index, ranks, searchKeyword)
