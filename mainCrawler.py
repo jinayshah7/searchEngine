@@ -57,3 +57,9 @@ def add_page_to_index(index,url,content):
         add_to_index(index,keyword,url)
 
 
+
+#index, graph = crawl_web("http://www.reddit.com",1)
+
+
+#for i in graph:
+ #   print i
